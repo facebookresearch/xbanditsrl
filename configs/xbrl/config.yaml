@@ -1,0 +1,76 @@
+defaults:
+  - _self_
+  - domain: statlog.yaml
+  - override hydra/launcher: submitit_slurm # joblib
+
+horizon: 10000
+algo: bsrllinucb
+
+# BSRL Parameters
+update_every: 1.2
+noise_std: ${domain.noise_param}
+delta: 0.01
+batch_size: 128
+max_updates: 30
+lr: 1e-3
+buffer_capacity: ${horizon}
+weight_decay: 0
+layers: 150
+weight_mse: 1
+weight_rayleigh: 0
+weight_weak: 0
+forced_exploration_decay: none
+normalize_features: True
+use_relu: True
+use_maxnorm: False
+
+#LinUCB
+ucb_regularizer: 1
+bonus_scale: 0.1
+adaptive_bonus_linucb: True
+
+#epsilon-greedy
+epsilon_decay: cbrt
+
+#GLRT
+glrt_scale: 1
+mingap_clip: 0.001
+check_glrt: True
+
+#IGWExploration
+refit_linear: False
+gamma_exponent: cbrt
+gamma_scale: 10
+
+# misc
+save_model_at_train: False
+save_history: False
+seed: 1
+device: cpu
+use_tb: true
+log_path: none
+log_every_t: 1000
+
+hydra:
+  run:
+    dir: ./output/${now:%Y.%m.%d}/${now:%H%M%S}_${algo}
+  sweep:
+    dir: ./multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}_${algo}
+    subdir: ${hydra.job.num}
+  # launcher:
+  #   timeout_min: 4000
+  launcher:
+    timeout_min: 4000
+    cpus_per_task: 4
+    gpus_per_node: 1
+    tasks_per_node: 1
+    mem_gb: 160
+    nodes: 1
+    submitit_folder: ./multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}_${algo}/.slurm
+    partition: learnlab
+  job_logging :
+      formatters:
+        simple:
+          format: '%(message)s'
+      root:
+        handlers: [file]

@@ -1,0 +1,8 @@
+type: c2b
+dataset_name: magic
+bandit_model: expanded #[expanded, onehot]
+rew_optimal_labels: 0.9
+rew_other_labels: 0.1
+noise: bernoulli
+noise_param: 0.5 #std
+shuffle: True

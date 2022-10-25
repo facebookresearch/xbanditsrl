@@ -1,0 +1,18 @@
+# problem
+type: wheel
+ncontexts: 100
+dim: 7
+narms: 5
+contextgeneration: none
+feature_expansion: none
+newrank: none
+mu_1: 1.0
+mu_2: 0.8
+mu_3: 1.2
+radius: 0.5
+
+# noise problem
+noise_type: gaussian
+noise_param: 0.2
+
+seed_problem: 0
